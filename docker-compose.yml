@@ -1,0 +1,42 @@
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: banco_postgres
+    environment:
+      POSTGRES_DB: banco_db
+      POSTGRES_USER: banco_user
+      POSTGRES_PASSWORD: banco_pass
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./BaseDatos.sql:/docker-entrypoint-initdb.d/BaseDatos.sql
+    networks:
+      - banco_network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U banco_user -d banco_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  api:
+    build: .
+    container_name: banco_api
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/banco_db
+      SPRING_DATASOURCE_USERNAME: banco_user
+      SPRING_DATASOURCE_PASSWORD: banco_pass
+    ports:
+      - "8080:8080"
+    networks:
+      - banco_network
+
+volumes:
+  postgres_data:
+
+networks:
+  banco_network:
+    driver: bridge
