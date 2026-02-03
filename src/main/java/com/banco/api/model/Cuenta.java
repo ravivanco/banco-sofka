@@ -1,30 +1,82 @@
 package com.banco.api.model;
 
-import jakarta.persistence.*;
-import lombok.Data;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 
-@Data
+import jakarta.persistence.*;
+
 @Entity
 @Table(name = "cuentas")
 public class Cuenta {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
-    @Column(nullable = false, unique = true, length = 20)
+
+    @Column(unique = true)
     private String numeroCuenta;
-    
-    @Column(nullable = false, length = 20)
+
     private String tipoCuenta;
-    
-    @Column(nullable = false)
     private Double saldoInicial;
-    
-    @Column(nullable = false)
-    private Boolean estado = true;
-    
+    private Boolean estado;
+
+    // 🔗 Relación con Cliente
     @ManyToOne
     @JoinColumn(name = "cliente_id", nullable = false)
     private Cliente cliente;
+
+    // ===== Getters & Setters =====
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getNumeroCuenta() {
+        return numeroCuenta;
+    }
+
+    public void setNumeroCuenta(String numeroCuenta) {
+        this.numeroCuenta = numeroCuenta;
+    }
+
+    public String getTipoCuenta() {
+        return tipoCuenta;
+    }
+
+    public void setTipoCuenta(String tipoCuenta) {
+        this.tipoCuenta = tipoCuenta;
+    }
+
+    public Double getSaldoInicial() {
+        return saldoInicial;
+    }
+
+    public void setSaldoInicial(Double saldoInicial) {
+        this.saldoInicial = saldoInicial;
+    }
+
+    public Boolean getEstado() {
+        return estado;
+    }
+
+    public void setEstado(Boolean estado) {
+        this.estado = estado;
+    }
+
+    public Cliente getCliente() {
+        return cliente;
+    }
+
+    public void setCliente(Cliente cliente) {
+        this.cliente = cliente;
+    }
 }

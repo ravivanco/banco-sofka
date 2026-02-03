@@ -10,7 +10,7 @@ services:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
-      - ./BaseDatos.sql:/docker-entrypoint-initdb.d/BaseDatos.sql
+      - ./init-db.sql:/docker-entrypoint-initdb.d/init-db.sql
     networks:
       - banco_network
     healthcheck:
